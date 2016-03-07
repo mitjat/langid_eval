@@ -17,7 +17,7 @@ All Tweets are from July 2014 and cover 70 languages: `am` (Amharic), `ar` (Arab
 To retrieve the text, use the Twitter API. An example of efficiently fetching the Tweets 100 at a time using the [statuses/lookup](https://dev.twitter.com/rest/reference/get/statuses/lookup) API endpoint, the [twurl](https://github.com/twitter/twurl) command-line utility, and [jq](https://stedolan.github.io/jq/) for JSON parsing:
 
 ```sh
-cat >/tmp/fetch.sh <<EOF
+cat >/tmp/fetch.sh <<'EOF'
 #!/bin/bash
 sleep 5
 twurl "/1.1/statuses/lookup.json?id=$(echo $@ | tr ' ' ,)&trim_user=true" | jq -c ".[]|[.id_str, .text]"
