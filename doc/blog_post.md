@@ -12,7 +12,7 @@ determining the language in which a piece of text is written.
 
 This is generally not a hard problem. Even with a small and simple model
 (e.g., list of most common words in each language), we can achieve
-near-perfect accuracy when classifying news articles [^1], for example.
+near-perfect accuracy when classifying news articles [1], for example.
 However, Tweets are different from the average news article or web page:
 they’re very short and use informal language. In practice, they’re
 different enough that we don’t want to evaluate language classifiers on
@@ -59,10 +59,10 @@ Czech classifier. We therefore built two more datasets.
 We construct a dataset for each language separately. Let’s take German
 as an example; we follow the same procedure for all languages.
 
-To measure recall of the German classifier, we need an unbiased [^2]
+To measure recall of the German classifier, we need an unbiased [2]
 sample of all Tweets in German. We cannot simply task a human annotator
 to go through all Tweets, as they would need to read hundreds of
-thousands of English Tweets to gather 1000 German ones [^3]. Instead, we
+thousands of English Tweets to gather 1000 German ones [3]. Instead, we
 use the following heuristic procedure:
 
 -   Determine the set of users U who Tweeted in German (according to our
@@ -81,7 +81,7 @@ we measured our classifier’s recall on three datasets:
 3.  the recall-oriented dataset as described above.
 
 The differences in recall estimates were statistically indistinguishable
-using a 95% confidence interval [^4]. For smaller languages, we don’t
+using a 95% confidence interval [4]. For smaller languages, we don’t
 always have enough data to rely on geo tags or the uniform stream, which
 is why we used the “10% heuristic” outlined above for all languages.
 While our 3-way comparison test on the 10 big languages does not
@@ -129,7 +129,7 @@ Twitter’s language identifier.
 Another use of the recall-oriented dataset is to measure precision on
 hypothetical data with a balanced language distribution (i.e., the same
 number of Tweets for every language). While not a commonly encountered
-setting in real life [^5], it is the “fairest,” most use-case agnostic
+setting in real life [5], it is the “fairest,” most use-case agnostic
 way of comparing disparate classifiers. It is used for example by [Mike
 McCandless](http://blog.mikemccandless.com/2011/10/accuracy-and-performance-of-googles.html)
 and the author of the “language-detection” java package. However, in
@@ -180,26 +180,25 @@ involved. For the majority of Tweets, it is not questionable what the
 main language is. But there are also a number of Tweets that are
 linguistically ambiguous or contain more than one language. To keep the
 complexity of the annotation task reasonable, we decided to use a single
-label for all such cases: “und” for “undefined” [^6].
+label for all such cases: “und” for “undefined” [6].
 
 To make the labeling process as predictable and consistent as possible,
 the annotators were given the following instructions:
 
-`Please help us determine the language in which Tweets are written. Possible answers:`
+```
+Please help us determine the language in which Tweets are written. Possible answers:
 
-`A language code "xx" (choose from list of possible codes). Choose this if a person HAS to speak xx to understand most of the Tweet or all of it, and speaking ONLY xx is enough to understand most or all of the Tweet.`
+A language code "xx" (choose from list of possible codes). Choose this if a person HAS to speak xx to understand most of the Tweet or all of it, and speaking ONLY xx is enough to understand most or all of the Tweet.
 
-`Undefined. Choose this if any of the following applies: • the Tweet can be interpreted in multiple languages (words used by multiple languages, interjections ("haha!", "yay"), proper names, emoticons, ...)`
+Undefined. Choose this if any of the following applies: • the Tweet can be interpreted in multiple languages (words used by multiple languages, interjections ("haha!", "yay"), proper names, emoticons, ...)
+ • the Tweet strongly mixes languages and does not have a clear "main" language
+ • the Tweet is gibberish, not written in any language (e.g. "#HarryStyles alskdfbasfd")
+ • the Tweet is written in an actual language not available on our list. In this case, please mark this in the Comments column.
 
-`• the Tweet strongly mixes languages and does not have a clear "main" language`
+Leave empty. If you are unable to provide an answer (i.e. you think the Tweet is written in an actual language, but do not recognize the language), do not enter anything.
 
-` • the Tweet is gibberish, not written in any language (e.g. "#HarryStyles alskdfbasfd")`
-
-` • the Tweet is written in an actual language not available on our list. In this case, please mark this in the Comments column.`
-
-`Leave empty. If you are unable to provide an answer (i.e. you think the Tweet is written in an actual language, but do not recognize the language), do not enter anything.`
-
-`It's OK to leave rows empty if you don't recognize the language -- you should not need to spend more than 10 seconds on a Tweet, and usually much less.`
+It's OK to leave rows empty if you don't recognize the language -- you should not need to spend more than 10 seconds on a Tweet, and usually much less.
+```
 
 We also presented annotators with the following borderline examples that
 were intended to calibrate them:
@@ -267,21 +266,21 @@ and Sumit Shah
 
 ### Footnotes
 
-[^1] An early paper by [Grefenstette
+[1] An early paper by [Grefenstette
 (1995)](http://www.xrce.xerox.com/content/download/23364/170614/file/Gref---Comparing-two-language-identificationschemes.pdf)
 evaluates this simple technique on newspaper articles and for a limited
 set of European languages. They achieve near-perfect accuracy for the
 big European languages on sentences with 20+ words.\
 
-[^2] Unbiased in the sense that German Tweets in our sample should be
+[2] Unbiased in the sense that German Tweets in our sample should be
 statistically indistinguishable from all German Tweets. They should have
 the same distribution of character ngram frequencies, word frequencies,
 emoticon and emoji usage, etc.\
 
-[^3] And literally billions of English Tweets to gather 1,000 Tibetan
+[3] And literally billions of English Tweets to gather 1,000 Tibetan
 ones.\
 
-[^4] Interesting detail: We were originally afraid that the
+[4] Interesting detail: We were originally afraid that the
 recall-oriented dataset might overestimate recall because it’s based on
 users that our own algorithm originally recognized as German, creating a
 possible positive feedback loop. Against our expectations, the recall as
@@ -295,11 +294,11 @@ constructing the uniformly sampled dataset, a borderline German/Swedish
 Tweet had a good chance of having been looked at by a Swedish
 annotator.\
 
-[^5] A possible exception are environments with very few languages, e.g.
+[5] A possible exception are environments with very few languages, e.g.
 a Canadian blog with a 60:40 English:French split in content. The
 recall-oriented dataset is well suited to estimating performance there.\
 
-[^6] ISO-693-3 suggests [more expressive special
+[6] ISO-693-3 suggests [more expressive special
 labels](https://en.wikipedia.org/wiki/ISO_639-3#Special_codes), and uses
 “und” to essentially mean “unlabeled”. This is the only place where we
 deviate slightly from the BCP-47 standard.
