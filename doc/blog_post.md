@@ -12,7 +12,7 @@ determining the language in which a piece of text is written.
 
 This is generally not a hard problem. Even with a small and simple model
 (e.g., list of most common words in each language), we can achieve
-near-perfect accuracy when classifying news articles [1], for example.
+near-perfect accuracy when classifying news articles [^1], for example.
 However, Tweets are different from the average news article or web page:
 they’re very short and use informal language. In practice, they’re
 different enough that we don’t want to evaluate language classifiers on
@@ -59,10 +59,10 @@ Czech classifier. We therefore built two more datasets.
 We construct a dataset for each language separately. Let’s take German
 as an example; we follow the same procedure for all languages.
 
-To measure recall of the German classifier, we need an unbiased [2]
+To measure recall of the German classifier, we need an unbiased [^2]
 sample of all Tweets in German. We cannot simply task a human annotator
 to go through all Tweets, as they would need to read hundreds of
-thousands of English Tweets to gather 1000 German ones [3]. Instead, we
+thousands of English Tweets to gather 1000 German ones [^3]. Instead, we
 use the following heuristic procedure:
 
 -   Determine the set of users U who Tweeted in German (according to our
@@ -81,7 +81,7 @@ we measured our classifier’s recall on three datasets:
 3.  the recall-oriented dataset as described above.
 
 The differences in recall estimates were statistically indistinguishable
-using a 95% confidence interval [4]. For smaller languages, we don’t
+using a 95% confidence interval [^4]. For smaller languages, we don’t
 always have enough data to rely on geo tags or the uniform stream, which
 is why we used the “10% heuristic” outlined above for all languages.
 While our 3-way comparison test on the 10 big languages does not
@@ -129,7 +129,7 @@ Twitter’s language identifier.
 Another use of the recall-oriented dataset is to measure precision on
 hypothetical data with a balanced language distribution (i.e., the same
 number of Tweets for every language). While not a commonly encountered
-setting in real life [5], it is the “fairest,” most use-case agnostic
+setting in real life [^5], it is the “fairest,” most use-case agnostic
 way of comparing disparate classifiers. It is used for example by [Mike
 McCandless](http://blog.mikemccandless.com/2011/10/accuracy-and-performance-of-googles.html)
 and the author of the “language-detection” java package. However, in
@@ -180,7 +180,7 @@ involved. For the majority of Tweets, it is not questionable what the
 main language is. But there are also a number of Tweets that are
 linguistically ambiguous or contain more than one language. To keep the
 complexity of the annotation task reasonable, we decided to use a single
-label for all such cases: “und” for “undefined” [6].
+label for all such cases: “und” for “undefined” [^6].
 
 To make the labeling process as predictable and consistent as possible,
 the annotators were given the following instructions:
@@ -249,63 +249,7 @@ three algorithms agree on about two-thirds of all Tweets.
 
 ### Data Download
 
-The annotated Tweets are available for download for anyone to evaluate
-their language identification algorithms:
-
--   [uniformly\_sampled.tsv](https://raw.githubusercontent.com/mitjat/langid_eval/master/uniformly_sampled.tsv)
-    — a uniform sample of all Twitter data; 120575 rows
--   [recall\_oriented.tsv](https://raw.githubusercontent.com/mitjat/langid_eval/master/recall_oriented.tsv)
-    — about 1500 Tweets per true language
--   [precision\_oriented.tsv](https://raw.githubusercontent.com/mitjat/langid_eval/master/precision_oriented.tsv)
-    — about 1000 Tweets per language as determined by an old version of
-    Twitter’s internal language identifier
-
-In addition, precision\_oriented.tsv contains language codes like
-`not-en`, which indicates this tweet is *not* English, though we don’t
-know its actual language.
-
-All Tweets are from July 2014 and cover 70 languages: am (Amharic), ar
-(Arabic), bg (Bulgarian), bn (Bengali), bo (Tibetan), bs (Bosnian), ca
-(Catalan), ckb (Sorani Kurdish), cs (Czech), cy (Welsh), da (Danish), de
-(German), dv (Maldivian), el (Greek), en (English), es (Spanish), et
-(Estonian), eu (Basque), fa (Persian), fi (Finnish), fr (French), gu
-(Gujarati), he (Hebrew), hi (Hindi), hi-Latn (Latinized Hindi), hr
-(Croatian), ht (Haitian Creole), hu (Hungarian), hy (Armenian), id
-(Indonesian), is (Icelandic), it (Italian), ja (Japanese), ka
-(Georgian), km (Khmer), kn (Kannada), ko (Korean), lo (Lao), lt
-(Lithuanian), lv (Latvian), ml (Malayalam), mr (Marathi), ms (Malay), my
-(Burmese), ne (Nepali), nl (Dutch), no (Norwegian), pa (Panjabi), pl
-(Polish), ps (Pashto), pt (Portuguese), ro (Romanian), ru (Russian), sd
-(Sindhi), si (Sinhala), sk (Slovak), sl (Slovenian), sr (Serbian), sv
-(Swedish), ta (Tamil), te (Telugu), th (Thai), tl (Tagalog), tr
-(Turkish), ug (Uyghur), uk (Ukrainian), ur (Urdu), vi (Vietnamese),
-zh-CN (Simplified Chinese), zh-TW (Traditional Chinese). There is a
-smattering of other language codes present in the data as an artifact of
-our labeling process, but Tweets in those languages were not collected
-systematically.
-
-To retrieve the text, use the Twitter API. An example of efficiently
-fetching the Tweets 100 at a time using the
-[statuses/lookup](https://dev.twitter.com/rest/reference/get/statuses/lookup)
-API endpoint, the [twurl](https://github.com/twitter/twurl) command-line
-utility, and [jq](https://stedolan.github.io/jq/) for JSON parsing:
-
-`cat >/tmp/fetch.sh <<EOF`\
-`#!/bin/bash`\
-`sleep 5`\
-`twurl "/1.1/statuses/lookup.json?id=$(echo $@ | tr ' ' ,)&trim_user=true" | jq -c ".[]|[.id_str, .text]"`\
-`EOF`
-
-`cat uniformly_sampled.tsv | cut -f2 | xargs -n100 /tmp/fetch.sh > hydrated.json`
-
-Make sure you’ve [completed the OAuth
-setup](https://github.com/twitter/twurl) for twurl (see “Getting
-started” on their github page) before running the above commands. The
-code above observes the [API rate
-limits](https://dev.twitter.com/rest/reference/get/statuses/lookup) by
-sleeping between requests. It silently skips Tweets that have been
-removed, and you will need to join the hydrated.json file with original
-language labels in uniformly\_sampled.tsv.
+See the [main README](../README.md).
 
 ### Acknowledgements 
 
@@ -323,18 +267,21 @@ and Sumit Shah
 
 ### Footnotes
 
-[1] An early paper by [Grefenstette
+[^1] An early paper by [Grefenstette
 (1995)](http://www.xrce.xerox.com/content/download/23364/170614/file/Gref---Comparing-two-language-identificationschemes.pdf)
 evaluates this simple technique on newspaper articles and for a limited
 set of European languages. They achieve near-perfect accuracy for the
 big European languages on sentences with 20+ words.\
-[2] Unbiased in the sense that German Tweets in our sample should be
+
+[^2] Unbiased in the sense that German Tweets in our sample should be
 statistically indistinguishable from all German Tweets. They should have
 the same distribution of character ngram frequencies, word frequencies,
 emoticon and emoji usage, etc.\
-[3] And literally billions of English Tweets to gather 1,000 Tibetan
+
+[^3] And literally billions of English Tweets to gather 1,000 Tibetan
 ones.\
-[4] Interesting detail: We were originally afraid that the
+
+[^4] Interesting detail: We were originally afraid that the
 recall-oriented dataset might overestimate recall because it’s based on
 users that our own algorithm originally recognized as German, creating a
 possible positive feedback loop. Against our expectations, the recall as
@@ -347,10 +294,12 @@ annotator to have a bias to yes and label it as German. Conversely, when
 constructing the uniformly sampled dataset, a borderline German/Swedish
 Tweet had a good chance of having been looked at by a Swedish
 annotator.\
-[5] A possible exception are environments with very few languages, e.g.
+
+[^5] A possible exception are environments with very few languages, e.g.
 a Canadian blog with a 60:40 English:French split in content. The
 recall-oriented dataset is well suited to estimating performance there.\
-[6] ISO-693-3 suggests [more expressive special
+
+[^6] ISO-693-3 suggests [more expressive special
 labels](https://en.wikipedia.org/wiki/ISO_639-3#Special_codes), and uses
 “und” to essentially mean “unlabeled”. This is the only place where we
 deviate slightly from the BCP-47 standard.
